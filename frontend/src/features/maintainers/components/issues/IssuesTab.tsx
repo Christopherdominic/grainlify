@@ -67,6 +67,7 @@ export function IssuesTab({ onNavigate, selectedProjects, onRefresh }: IssuesTab
   const [issues, setIssues] = useState<Array<IssueFromAPI & { projectName: string; projectId: string }>>([]);
   const [isLoadingIssues, setIsLoadingIssues] = useState(true);
   const [issuesError, setIssuesError] = useState<string | null>(null);
+  const [showInitialLoading, setShowInitialLoading] = useState(true);
 
   // Helper function to format time ago (memoized)
   const formatTimeAgo = useCallback((dateString: string | null): string => {
@@ -271,9 +272,11 @@ export function IssuesTab({ onNavigate, selectedProjects, onRefresh }: IssuesTab
 
         {/* Issues List */}
         <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-custom">
-          {isLoadingIssues ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className={`w-6 h-6 animate-spin ${isDark ? 'text-[#c9983a]' : 'text-[#c9983a]'}`} />
+          {showInitialLoading || isLoadingIssues ? (
+            <div className="space-y-3">
+              {[...Array(8)].map((_, idx) => (
+                <SkeletonLoader key={idx} className="h-[120px] w-full" />
+              ))}
             </div>
           ) : issuesError ? (
             <div className={`flex items-center gap-3 px-4 py-4 mx-4 rounded-[12px] ${

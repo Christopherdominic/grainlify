@@ -226,9 +226,11 @@ export function PullRequestsTab({ selectedProjects, onRefresh }: PullRequestsTab
         </div>
 
         {/* Pull Request Rows */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className={`w-6 h-6 animate-spin ${theme === 'dark' ? 'text-[#c9983a]' : 'text-[#c9983a]'}`} />
+        {showInitialLoading || isLoading ? (
+          <div className="space-y-4">
+            {[...Array(8)].map((_, idx) => (
+              <SkeletonLoader key={idx} className="h-[100px] w-full" />
+            ))}
           </div>
         ) : error ? (
           <div className={`flex items-center gap-3 px-6 py-4 mx-4 rounded-[12px] ${

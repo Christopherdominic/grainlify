@@ -6,6 +6,7 @@ import { ActivityItem } from './ActivityItem';
 import { ApplicationsChart } from './ApplicationsChart';
 import { StatCard, Activity, ChartDataPoint } from '../../types';
 import { getProjectIssues, getProjectPRs } from '../../../../shared/api/client';
+import { SkeletonLoader } from '../../../../shared/components/SkeletonLoader';
 
 interface Project {
   id: string;
@@ -23,6 +24,16 @@ export function DashboardTab({ selectedProjects, onRefresh }: DashboardTabProps)
   const [issues, setIssues] = useState<any[]>([]);
   const [prs, setPrs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showInitialLoading, setShowInitialLoading] = useState(true);
+
+  // Initial loading state (1 second delay like payout preferences)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowInitialLoading(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Fetch data from selected projects
   useEffect(() => {
