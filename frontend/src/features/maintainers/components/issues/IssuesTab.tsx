@@ -320,7 +320,7 @@ export function IssuesTab({ onNavigate, selectedProjects, onRefresh }: IssuesTab
           : 'bg-white/[0.12] border-white/20'
       }`}>
         {!selectedIssue ? (
-          <EmptyIssueState issueCount={issuesData.length} />
+          <EmptyIssueState issueCount={issues.length} />
         ) : (
           <div className="p-8">
             {/* Header */}
