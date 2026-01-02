@@ -2,19 +2,33 @@
 
 ## Running the Backend Server
 
-### Option 1: Auto-reload with Air (Recommended for Development)
+### Option 1: Auto-reload with Air (Recommended for Development) ⚡
 
-The server will automatically restart when you make changes to any `.go` file.
+The server will **automatically restart** when you make changes to any `.go` file.
 
 ```bash
-# Using the run script (handles PATH automatically)
+# Quick start - recommended (handles PATH and installation automatically)
 ./run-dev.sh
 
-# Or directly with air
+# Or directly with air (if already installed)
 air
 
 # Or using make
 make dev
+```
+
+**What gets watched:**
+- All `.go` files in `cmd/`, `internal/`, and root
+- Automatically excludes: `tmp/`, `vendor/`, `testdata/`, `migrations/`, `.git/`, test files
+- Restarts within 1 second of file changes
+
+**First time setup:**
+```bash
+# Install air
+go install github.com/air-verse/air@latest
+
+# Add to PATH (add to ~/.zshrc or ~/.bashrc)
+export PATH=$PATH:$HOME/go/bin
 ```
 
 ### Option 2: Standard Go Run (No Auto-reload)
