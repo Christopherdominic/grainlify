@@ -84,7 +84,7 @@ This enables **continuous OSS funding**, not just events.
 
 ## 5. System Roles
 
-### Ecosystems (Casper, Cronos, etc.)
+### Ecosystem (Stellar)
 
 - Provide grant capital
 - Define program scope and duration
@@ -152,7 +152,7 @@ No identities, points, or GitHub data are stored on-chain.
 ### Step 1 — Program Funding
 
 - Ecosystem locks funds into an on-chain escrow  
-  Example: 50,000 CSPR for “Casper Q1 OSS Program”
+  Example: 50,000 XLM for “Stellar Q1 OSS Program”
 
 ### Step 2 — Hackathon Runs
 
@@ -176,7 +176,7 @@ No identities, points, or GitHub data are stored on-chain.
 ```mermaid
 flowchart TB
     Ecosystem["Ecosystem / Foundation"]
-    Escrow["On-chain Escrow<br/>Casper Smart Contract"]
+    Escrow["On-chain Escrow<br/>Stellar (Soroban) Smart Contract"]
     Backend["Grainlify Backend"]
     GitHub["GitHub<br/>Issues & PRs"]
     Contributors["Contributors"]
@@ -195,7 +195,7 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant E as Ecosystem
-    participant S as Casper Escrow Contract
+    participant S as Stellar (Soroban) Escrow Contract
     participant B as Grainlify Backend
     participant G as GitHub
     participant C as Contributor
@@ -206,7 +206,7 @@ sequenceDiagram
     G-->>B: PR Merged Webhook
     B->>B: Award Points (Off-chain)
     B->>S: Trigger Payouts
-    S->>W: Transfer CSPR
+    S->>W: Transfer XLM
 ```
 
 ---
