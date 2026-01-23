@@ -27,6 +27,8 @@ import {
   Crown,
   Link,
   ArrowLeft,
+  X,
+  FileEdit,
 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { useTheme } from "../../../shared/contexts/ThemeContext";
@@ -118,6 +120,8 @@ export function ProfilePage({
       month_year: string;
       project_name: string;
       project_id: string;
+      merged?: boolean;
+      draft?: boolean;
     }>
   >([]);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
@@ -370,6 +374,67 @@ export function ProfilePage({
     return false;
   };
 
+  // Helper function to get PR state styling
+  const getPRStateStyle = (
+    state: string,
+    merged: boolean,
+    draft: boolean,
+  ): {
+    iconBgColor: string;
+    icon: any;
+    badgeText: string;
+    badgeColor: string;
+    shadowColor: string;
+    hoverShadow: string;
+  } => {
+    // Priority: merged > draft > state
+    if (merged) {
+      return {
+        iconBgColor: "bg-gradient-to-br from-[#c9983a]/80 to-[#d4af37]/60",
+        icon: GitMerge,
+        badgeText: "Merged",
+        badgeColor: "bg-[#c9983a]/40 border-[#d4af37]/60 text-[#f5d98a]",
+        shadowColor: "shadow-[0_4px_16px_rgba(201,152,58,0.5)]",
+        hoverShadow:
+          "group-hover/item:shadow-[0_5px_20px_rgba(201,152,58,0.6)]",
+      };
+    }
+
+    if (draft) {
+      return {
+        iconBgColor: "bg-gradient-to-br from-[#c9983a]/30 to-[#a67c2e]/20",
+        icon: FileEdit,
+        badgeText: "Draft",
+        badgeColor: "bg-[#c9983a]/20 border-[#c9983a]/40 text-[#d4c5b0]",
+        shadowColor: "shadow-[0_4px_16px_rgba(201,152,58,0.25)]",
+        hoverShadow:
+          "group-hover/item:shadow-[0_5px_20px_rgba(201,152,58,0.35)]",
+      };
+    }
+
+    if (state === "open") {
+      return {
+        iconBgColor: "bg-gradient-to-br from-[#c9983a]/60 to-[#d4af37]/50",
+        icon: GitPullRequest,
+        badgeText: "Open",
+        badgeColor: "bg-[#c9983a]/35 border-[#d4af37]/50 text-[#f5c563]",
+        shadowColor: "shadow-[0_4px_16px_rgba(201,152,58,0.4)]",
+        hoverShadow:
+          "group-hover/item:shadow-[0_5px_20px_rgba(201,152,58,0.5)]",
+      };
+    }
+
+    // Closed (not merged)
+    return {
+      iconBgColor: "bg-gradient-to-br from-[#8b7355]/50 to-[#6b5d4d]/40",
+      icon: X,
+      badgeText: "Closed",
+      badgeColor: "bg-[#8b7355]/30 border-[#8b7355]/50 text-[#b8a898]",
+      shadowColor: "shadow-[0_4px_16px_rgba(139,115,85,0.3)]",
+      hoverShadow: "group-hover/item:shadow-[0_5px_20px_rgba(139,115,85,0.4)]",
+    };
+  };
+
   // Group contribution activity by month, filtering to only show open issues
   const contributionsByMonth: { [key: string]: any[] } = {};
   contributionActivity.forEach((activity) => {
@@ -395,6 +460,10 @@ export function ProfilePage({
         month: "short",
       }),
       url: activity.url,
+      // ADD THESE THREE LINES:
+      state: activity.state,
+      merged: activity.merged,
+      draft: activity.draft,
     });
   });
 
