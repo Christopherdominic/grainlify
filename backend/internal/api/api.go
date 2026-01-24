@@ -88,6 +88,11 @@ func New(cfg config.Config, deps Deps) *fiber.App {
 			return true
 		}
 
+		// Allow all Vercel preview deployments (*.vercel.app)
+		if strings.HasSuffix(origin, ".vercel.app") {
+			return true
+		}
+
 		if _, ok := explicitOrigins[origin]; ok {
 			return true
 		}
