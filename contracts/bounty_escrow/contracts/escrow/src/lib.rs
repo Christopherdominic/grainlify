@@ -455,7 +455,6 @@ pub enum Error {
     InvalidAmount = 13,
     /// Returned when deadline is invalid (in the past or too far in the future)
     InvalidDeadline = 14,
-    DuplicateBountyId = 15,
     /// Returned when contract has insufficient funds for the operation
     InsufficientFunds = 16,
     /// Returned when refund is attempted without admin approval

@@ -485,18 +485,6 @@ mod anti_abuse {
 
 const PROGRAM_REGISTERED: Symbol = symbol_short!("ProgReg");
 
-/// Event emitted when funds are locked in the program.
-/// Topic: `FundsLocked`
-const FUNDS_LOCKED: Symbol = symbol_short!("FundsLock");
-
-/// Event emitted when a batch payout is executed.
-/// Topic: `BatchPayout`
-const BATCH_PAYOUT: Symbol = symbol_short!("BatchPay");
-
-/// Event emitted when a single payout is executed.
-/// Topic: `Payout`
-const PAYOUT: Symbol = symbol_short!("Payout");
-
 // ============================================================================
 // Storage Keys
 // ============================================================================
@@ -612,13 +600,13 @@ impl ProgramEscrowContract {
     // ========================================================================
 
     /// Initializes a new program escrow for managing prize distributions.
-    ///
+    /// 
     /// # Arguments
     /// * `env` - The contract environment
     /// * `program_id` - Unique identifier for this program/hackathon
     /// * `authorized_payout_key` - Address authorized to trigger payouts (backend)
     /// * `token_address` - Address of the token contract for transfers (e.g., USDC)
-    ///
+    /// 
     /// # Returns
     /// * `ProgramData` - The initialized program configuration
     ///
@@ -797,10 +785,10 @@ impl ProgramEscrowContract {
     }
 
     /// Checks if a program exists.
-    ///
+    /// 
     /// # Arguments
     /// * `program_id` - The program ID to check
-    ///
+    /// 
     /// # Returns
     /// * `bool` - True if program exists, false otherwise
     pub fn program_exists(env: Env, program_id: String) -> bool {
@@ -952,18 +940,7 @@ impl ProgramEscrowContract {
                 net_amount,
                 program_data.remaining_balance,
             ),
-        // Emit event
-        env.events().publish(
-            (FUNDS_LOCKED,),
-            (program_id, amount, program_data.remaining_balance),
         );
-
-        // Track successful operation
-        monitoring::track_operation(&env, symbol_short!("lock"), caller, true);
-
-        // Track performance
-        let duration = env.ledger().timestamp().saturating_sub(start);
-        monitoring::emit_performance(&env, symbol_short!("lock"), duration);
 
         program_data
     }
@@ -973,12 +950,12 @@ impl ProgramEscrowContract {
     // ========================================================================
 
     /// Executes batch payouts to multiple recipients simultaneously.
-    ///
+    /// 
     /// # Arguments
     /// * `env` - The contract environment
     /// * `recipients` - Vector of recipient addresses
     /// * `amounts` - Vector of amounts (must match recipients length)
-    ///
+    /// 
     /// # Returns
     /// * `ProgramData` - Updated program data after payouts
     ///
@@ -1103,7 +1080,6 @@ impl ProgramEscrowContract {
         let mut total_payout: i128 = 0;
         for i in 0..amounts.len() {
             let amount = amounts.get(i).unwrap();
-        for amount in amounts.iter() {
             if amount <= 0 {
                 panic!("All amounts must be greater than zero");
             }
@@ -1196,12 +1172,12 @@ impl ProgramEscrowContract {
     }
 
     /// Executes a single payout to one recipient.
-    ///
+    /// 
     /// # Arguments
     /// * `env` - The contract environment
     /// * `recipient` - Address of the prize recipient
     /// * `amount` - Amount to transfer (in token's smallest denomination)
-    ///
+    /// 
     /// # Returns
     /// * `ProgramData` - Updated program data after payout
     ///
@@ -1357,7 +1333,7 @@ impl ProgramEscrowContract {
     ///
     /// # Arguments
     /// * `env` - The contract environment
-    ///
+    /// 
     /// # Returns
     /// * `ProgramData` - Complete program state including:
     ///   - Program ID
@@ -1399,7 +1375,7 @@ impl ProgramEscrowContract {
     ///
     /// # Arguments
     /// * `program_id` - The program ID to query
-    ///
+    /// 
     /// # Returns
     /// * `i128` - Remaining balance
     ///
@@ -1482,6 +1458,8 @@ impl ProgramEscrowContract {
     /// Get current fee configuration (view function)
     pub fn get_fee_config(env: Env) -> FeeConfig {
         Self::get_fee_config_internal(&env)
+    }
+
     /// Gets the total number of programs registered.
     ///
     /// # Returns
